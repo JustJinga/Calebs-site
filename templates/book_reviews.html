@@ -54,7 +54,7 @@
         <p>
           Okay I'm going to try keep this updated whenever I finish a new book because It would be good to keep an actual
           list of all my books cause I always forget to update my goodreads so yeah. Oh this is my goodreads btw if U wanna see books I've read previously!
-          <a href="https://www.goodreads.com/user/show/191453462-caleb-moyle" target="_blank">Good reads :)</a>
+          <a href="https://www.goodreads.com/user/show/191453462-caleb-moyle" target="_blank">Good reads :)</a>  --- I've just now noticed.. I rate a lot of books 5 starts... oops.
         </p>
 
       </section>
@@ -76,7 +76,7 @@
             type="text"
             id="review-search"
             class="review-search"
-            placeholder="Search by title..."
+            placeholder="Search by title or author..."
           >
 
           <select id="review-sort" class="review-sort">
@@ -99,6 +99,7 @@
             data-title="{{ review.title }}"
             data-rating="{{ review.rating }}"
             data-date="{{ review.date }}"
+            data-author="{{ review.author }}"
           >
 
             <img
@@ -201,12 +202,14 @@
         ? linkEl.textContent
         : row.textContent;
 
-      const searchableText =
-        (
-          (row.dataset.title || '') +
-          ' ' +
-          visibleText
-        ).toLowerCase();
+      const searchableText = 
+          (
+              (row.dataset.title || '') + 
+              ' ' +
+              (row.dataset.author || '') +
+              ' ' +
+              visibleText
+          ).toLowerCase();
 
       return {
 
