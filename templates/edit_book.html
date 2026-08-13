@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Edit Book — Calebs Cove</title>
+
+</head>
+
+<body>
+
+    <h1>Edit Book</h1>
+
+
+    <form method="POST">
+
+        <p>
+
+            <label for="title">
+                Title
+            </label>
+
+            <br>
+
+            <input
+                type="text"
+                id="title"
+                name="title"
+                value="{{ book.title }}"
+                required
+            >
+
+        </p>
+
+
+        <p>
+
+            <label for="author">
+                Author
+            </label>
+
+            <br>
+
+            <input
+                type="text"
+                id="author"
+                name="author"
+                value="{{ book.author }}"
+                required
+            >
+
+        </p>
+
+
+        <p>
+
+            <label for="author_url">
+                Author Goodreads URL
+            </label>
+
+            <br>
+
+            <input
+                type="url"
+                id="author_url"
+                name="author_url"
+                value="{{ book.author_url or '' }}"
+            >
+
+        </p>
+
+
+        <p>
+
+            <label for="rating">
+                Rating
+            </label>
+
+            <br>
+
+            <select
+                id="rating"
+                name="rating"
+                required
+            >
+
+                {% for rating in range(1, 6) %}
+
+                    <option
+                        value="{{ rating }}"
+                        {% if book.rating == rating %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ "★" * rating }}
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+        </p>
+
+
+        <p>
+
+            <label for="date">
+                Date
+            </label>
+
+            <br>
+
+            <input
+                type="date"
+                id="date"
+                name="date"
+                value="{{ book.date }}"
+                required
+            >
+
+        </p>
+
+
+        <p>
+
+            <label for="cover_url">
+                Cover Image URL
+            </label>
+
+            <br>
+
+            <input
+                type="url"
+                id="cover_url"
+                name="cover_url"
+                value="{{ book.cover_url or '' }}"
+            >
+
+        </p>
+
+
+        <p>
+
+            <label for="review">
+                Review
+            </label>
+
+            <br>
+
+            <textarea
+                id="review"
+                name="review"
+                rows="10"
+                cols="60"
+                required
+            >{{ book.review }}</textarea>
+
+        </p>
+
+
+        <button type="submit">
+            Save Changes
+        </button>
+
+    </form>
+
+
+    <p>
+        <a href="{{ url_for('admin') }}">
+            ← Back to Admin
+        </a>
+    </p>
+
+</body>
+
+</html>

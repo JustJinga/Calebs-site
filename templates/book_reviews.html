@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caleb Moyle — Book Reviews</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+<div class="page">
+
+  <div class="banner">
+    <div class="banner-title">Calebs Cove</div>
+    <img src="{{ url_for('static', filename='Images/hat.png') }}" class="hat" alt="">
+    <img src="{{ url_for('static', filename='Images/Finn-and-Jake.png') }}" class="Finn" alt="">
+    <div class="banner-sub">Book Reviews</div>
+  </div>
+
+  <div class="layout">
+
+    <div class="sidebar">
+      <div class="sidebar-title"> Socials</div>
+
+      <ul class="contact-list">
+        <li><a href="https://discord.com/users/294231597937590285" target="_blank">🥝 Discord</a></li>
+        <li><a href="https://www.instagram.com/caleb_moyle/" target="_blank">🥝 Instagram</a></li>
+        <li>Contact</li>
+        <li><a href="mailto:calebmoyle@icloud.com">🥝 Email</a></li>
+        <li><a href="https://github.com/JustJinga" target="_blank">🥝 GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/caleb-m-b85451331/" target="_blank">🥝 LinkedIn</a></li>
+      </ul>
+
+      <div class="now-playing">
+        <div class="now-playing-label">All my pages</div>
+
+        <ul class="contact-list">
+          <li><a href="/"> Home</a></li>
+          <li><a href="/books"> Book Reviews!!</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <section id="about" class="panel">
+
+        <div class="loader">
+          <h2>Yeah I Read</h2>
+        </div>
+
+        <hr>
+
+        <p>
+          Okay I'm going to try keep this updated whenever I finish a new book because It would be good to keep an actual
+          list of all my books cause I always forget to update my goodreads so yeah. Oh this is my goodreads btw if U wanna see books I've read previously!
+          <a href="https://www.goodreads.com/user/show/191453462-caleb-moyle" target="_blank">Good reads :)</a>
+        </p>
+
+      </section>
+
+
+      <section id="reviews" class="panel">
+
+        <div class="work-header">
+          <span class="work-header-icon">꧁</span>
+          <h2>Reviews</h2>
+        </div>
+
+        <hr>
+
+
+        <div class="review-controls">
+
+          <input
+            type="text"
+            id="review-search"
+            class="review-search"
+            placeholder="Search by title..."
+          >
+
+          <select id="review-sort" class="review-sort">
+            <option value="date-desc">Newest First</option>
+            <option value="date-asc">Oldest First</option>
+            <option value="rating-desc">Highest Rated</option>
+            <option value="rating-asc">Lowest Rated</option>
+            <option value="title-asc">Title A–Z</option>
+          </select>
+
+        </div>
+
+
+        <div class="work-list" id="review-list">
+
+          {% for review in reviews %}
+
+          <div
+            class="work-row review-entry review-entry--cover"
+            data-title="{{ review.title }}"
+            data-rating="{{ review.rating }}"
+            data-date="{{ review.date }}"
+          >
+
+            <img
+              class="review-cover"
+              src="{{ review.cover_url }}"
+              alt="{{ review.title }} cover"
+            >
+
+            <div class="review-info">
+
+              <span class="review-title-line">
+
+                <span class="work-link">
+
+                  {{ review.title }}
+
+                  <span class="review-stars">
+                    {{ "★" * review.rating }}
+                  </span>
+
+                </span>
+
+              </span>
+
+
+              <span class="review-author">
+
+                by
+
+                <a
+                  href="{{ review.author_url }}"
+                  target="_blank"
+                >
+                  {{ review.author }}
+                </a>
+
+              </span>
+
+
+              <span class="review-date">
+                {{ review.date[5:7] }}/{{ review.date[0:4] }}
+              </span>
+
+
+              <p class="review-desc--cover">
+                {{ review.review }}
+              </p>
+
+            </div>
+
+          </div>
+
+          {% endfor %}
+
+        </div>
+
+
+        <p
+          id="review-empty"
+          class="work-row-desc"
+          style="display:none;"
+        >
+          No reviews match that search.
+        </p>
+
+      </section>
+
+    </div>
+
+  </div>
+
+
+  <div class="footer">
+    Thanks for Hangin'
+  </div>
+
+</div>
+
+
+<script>
+(function () {
+
+  const searchInput = document.getElementById('review-search');
+  const sortSelect = document.getElementById('review-sort');
+  const list = document.getElementById('review-list');
+  const emptyMsg = document.getElementById('review-empty');
+
+
+  function getEntries() {
+
+    const rows = Array.from(
+      list.querySelectorAll('.review-entry')
+    );
+
+    return rows.map(row => {
+
+      const linkEl = row.querySelector('.work-link');
+
+      const visibleText = linkEl
+        ? linkEl.textContent
+        : row.textContent;
+
+      const searchableText =
+        (
+          (row.dataset.title || '') +
+          ' ' +
+          visibleText
+        ).toLowerCase();
+
+      return {
+
+        row: row,
+
+        desc: row.querySelector('.review-desc--cover'),
+
+        title: searchableText,
+
+        sortTitle:
+          (row.dataset.title || visibleText).toLowerCase(),
+
+        rating:
+          parseFloat(row.dataset.rating) || 0,
+
+        date:
+          row.dataset.date || ''
+
+      };
+
+    });
+
+  }
+
+
+  function applyFilterSort() {
+
+    const query =
+      searchInput.value.trim().toLowerCase();
+
+    const sortVal =
+      sortSelect.value;
+
+    let entries = getEntries();
+
+
+    // Filter
+
+    entries.forEach(e => {
+
+      const match =
+        e.title.includes(query);
+
+      e.row.style.display =
+        match ? '' : 'none';
+
+    });
+
+
+    const visible =
+      entries.filter(e =>
+        e.title.includes(query)
+      );
+
+
+    emptyMsg.style.display =
+      visible.length === 0 ? '' : 'none';
+
+
+    // Sort
+
+    let sorted =
+      visible.slice();
+
+
+    switch (sortVal) {
+
+      case 'date-desc':
+
+        sorted.sort((a, b) =>
+          b.date.localeCompare(a.date)
+        );
+
+        break;
+
+
+      case 'date-asc':
+
+        sorted.sort((a, b) =>
+          a.date.localeCompare(b.date)
+        );
+
+        break;
+
+
+      case 'rating-desc':
+
+        sorted.sort((a, b) =>
+          b.rating - a.rating
+        );
+
+        break;
+
+
+      case 'rating-asc':
+
+        sorted.sort((a, b) =>
+          a.rating - b.rating
+        );
+
+        break;
+
+
+      case 'title-asc':
+
+        sorted.sort((a, b) =>
+          a.sortTitle.localeCompare(b.sortTitle)
+        );
+
+        break;
+
+    }
+
+
+    // Re-append entries in sorted order
+
+    sorted.forEach(e => {
+
+      list.appendChild(e.row);
+
+    });
+
+  }
+
+
+  searchInput.addEventListener(
+    'input',
+    applyFilterSort
+  );
+
+  sortSelect.addEventListener(
+    'change',
+    applyFilterSort
+  );
+
+})();
+</script>
+
+</body>
+</html>

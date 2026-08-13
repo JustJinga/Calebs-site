@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Add Book — Calebs Cove</title>
+
+</head>
+
+<body>
+
+    <h1>Add a Book</h1>
+
+
+    <form method="POST">
+
+        <p>
+            <label for="title">
+                Title
+            </label>
+
+            <br>
+
+            <input
+                type="text"
+                id="title"
+                name="title"
+                required
+            >
+        </p>
+
+
+        <p>
+            <label for="author">
+                Author
+            </label>
+
+            <br>
+
+            <input
+                type="text"
+                id="author"
+                name="author"
+                required
+            >
+        </p>
+
+
+        <p>
+            <label for="author_url">
+                Author Goodreads URL
+            </label>
+
+            <br>
+
+            <input
+                type="url"
+                id="author_url"
+                name="author_url"
+            >
+        </p>
+
+
+        <p>
+            <label for="rating">
+                Rating
+            </label>
+
+            <br>
+
+            <select
+                id="rating"
+                name="rating"
+                required
+            >
+
+                <option value="1">★</option>
+                <option value="2">★★</option>
+                <option value="3">★★★</option>
+                <option value="4">★★★★</option>
+                <option value="5" selected>★★★★★</option>
+
+            </select>
+
+        </p>
+
+
+        <p>
+            <label for="date">
+                Date
+            </label>
+
+            <br>
+
+            <input
+                type="date"
+                id="date"
+                name="date"
+                required
+            >
+        </p>
+
+
+        <p>
+            <label for="cover_url">
+                Cover Image URL
+            </label>
+
+            <br>
+
+            <input
+                type="url"
+                id="cover_url"
+                name="cover_url"
+            >
+        </p>
+
+
+        <p>
+
+            <label for="review">
+                Review
+            </label>
+
+            <br>
+
+            <textarea
+                id="review"
+                name="review"
+                rows="10"
+                cols="60"
+                required
+            ></textarea>
+
+        </p>
+
+
+        <button type="submit">
+            Add Book
+        </button>
+
+    </form>
+
+
+    <p>
+        <a href="{{ url_for('admin') }}">
+            ← Back to Admin
+        </a>
+    </p>
+
+</body>
+
+</html>
