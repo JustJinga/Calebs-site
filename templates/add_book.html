@@ -18,8 +18,10 @@
 
     <h1>Add a Book</h1>
 
-
     <form method="POST">
+
+        <!-- CSRF protection -->
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
         <p>
             <label for="title">
@@ -36,7 +38,6 @@
             >
         </p>
 
-
         <p>
             <label for="author">
                 Author
@@ -52,7 +53,6 @@
             >
         </p>
 
-
         <p>
             <label for="author_url">
                 Author Goodreads URL
@@ -66,7 +66,6 @@
                 name="author_url"
             >
         </p>
-
 
         <p>
             <label for="rating">
@@ -91,7 +90,6 @@
 
         </p>
 
-
         <p>
             <label for="date">
                 Date
@@ -107,7 +105,6 @@
             >
         </p>
 
-
         <p>
             <label for="cover_url">
                 Cover Image URL
@@ -121,7 +118,6 @@
                 name="cover_url"
             >
         </p>
-
 
         <p>
 
@@ -141,13 +137,11 @@
 
         </p>
 
-
         <button type="submit">
             Add Book
         </button>
 
     </form>
-
 
     <p>
         <a href="{{ url_for('admin') }}">

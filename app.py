@@ -8,14 +8,13 @@ from flask_login import (
 )
 import os
 import sqlite3
-
+from flask_wtf import CSRFProtect
 from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-
-
 app.secret_key = os.environ['FLASK_SECRET_KEY']
+csrf = CSRFProtect(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -37,7 +36,9 @@ def load_user(user_id):
 # Database helper
 
 def get_db():
-    conn = sqlite3.connect('database.db')
+    conn = sqlite3.connect(
+        app.config.get("DATABASE", "database.db")
+    )
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -228,6 +229,35 @@ def edit_book(book_id):
         'edit_book.html',
         book=book
     )
+
+# Delete book
+
+@app.route('/admin/delete-book/<int:book_id>', methods=['POST'])
+@login_required
+def delete_book(book_id):
+
+    conn = get_db()
+
+    book = conn.execute(
+        'SELECT * FROM reviews WHERE id = ?',
+        (book_id,)
+    ).fetchone()
+
+    if book is None:
+        conn.close()
+        return 'Book not found', 404
+
+    conn.execute(
+        'DELETE FROM reviews WHERE id = ?',
+        (book_id,)
+    )
+
+    conn.commit()
+    conn.close()
+
+    flash('Book deleted successfully!')
+
+    return redirect(url_for('admin'))
 
 
 if __name__ == '__main__':

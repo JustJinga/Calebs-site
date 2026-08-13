@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,14 +21,22 @@
 
     <form method="POST">
 
-        <label for="password">Password:</label>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-        <input
-            type="password"
-            id="password"
-            name="password"
-            required
-        >
+        <p>
+            <label for="password">
+                Password
+            </label>
+
+            <br>
+
+            <input
+                type="password"
+                id="password"
+                name="password"
+                required
+            >
+        </p>
 
         <button type="submit">
             Login
